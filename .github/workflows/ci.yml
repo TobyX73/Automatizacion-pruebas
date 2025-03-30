@@ -10,7 +10,7 @@ on:
 
 jobs:
   selenium_tests:
-    runs-on: ubuntu-latest  # Utiliza una imagen de Ubuntu para ejecutar las pruebas
+    runs-on: windows-latest  # Utiliza una imagen de Ubuntu para ejecutar las pruebas
 
     steps:
     - name: Check out the repository
