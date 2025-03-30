@@ -7,7 +7,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 # Configuración del WebDriver
 options = webdriver.ChromeOptions()
-# Elimina "--headless" para depurar visualmente
 driver = webdriver.Chrome(options=options)
 
 def submitContactForm():

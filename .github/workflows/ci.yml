@@ -24,15 +24,15 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  # Instala las dependencias, como Selenium, usando el archivo requirements.txt
+        pip install -r requirements.txt 
 
     - name: Set up Chrome and ChromeDriver
       run: |
         sudo apt-get update
         sudo apt-get install -y chromium-browser
         sudo apt-get install -y chromium-chromedriver
-        export PATH=$PATH:/usr/lib/chromium-browser/chromedriver  # Asegúrate de que ChromeDriver esté en el PATH
+        export PATH=$PATH:/usr/lib/chromium-browser/chromedriver 
 
     - name: Run Selenium tests
       run: |
-        python tu_script.py  # Ejecuta tu script de Selenium
+        python tu_script.py  
