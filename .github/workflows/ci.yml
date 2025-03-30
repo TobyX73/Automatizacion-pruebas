@@ -1,34 +1,28 @@
-name: Run Selenium Tests
+name: Selenium Tests
 
-on:
-  push:
-    branches:
-      - main  # Aquí se ejecutará el flujo cuando se haga un push en la rama main
-  pull_request:
-    branches:
-      - main  # También puedes configurarlo para que se ejecute en pull requests
+on: [push, pull_request]
 
 jobs:
-  selenium_tests:
-    runs-on: windows-latest  # Utiliza una imagen de Ubuntu para ejecutar las pruebas
-
+  test:
+    runs-on: windows-latest  # Ahora sí corre en Windows
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2  # Clona el repositorio para poder acceder al código
+      - name: Checkout del código
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'  # Especifica la versión de Python que necesitas
+      - name: Instalar Google Chrome y Chromedriver
+        run: |
+          choco install googlechrome -y
+          choco install chromedriver -y
 
-    - name: Install dependencies
-      run: pip install selenium
+      - name: Configurar Chromedriver en PATH
+        run: |
+          echo "C:\Program Files\Google\Chrome\Application" | Out-File -Append -Encoding utf8 $env:GITHUB_PATH
+          echo "C:\ProgramData\chocolatey\bin" | Out-File -Append -Encoding utf8 $env:GITHUB_PATH
 
-    - name: Install ChromeDriver
-      run: |
-        sudo apt update
-        sudo apt install -y chromedriver
+      - name: Instalar Python y dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run Selenium tests
-      run: |
-        python main.py  
+      - name: Ejecutar script con Selenium
+        run: python main.py
