@@ -1,0 +1,38 @@
+name: Run Selenium Tests
+
+on:
+  push:
+    branches:
+      - main  # Aquí se ejecutará el flujo cuando se haga un push en la rama main
+  pull_request:
+    branches:
+      - main  # También puedes configurarlo para que se ejecute en pull requests
+
+jobs:
+  selenium_tests:
+    runs-on: ubuntu-latest  # Utiliza una imagen de Ubuntu para ejecutar las pruebas
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2  # Clona el repositorio para poder acceder al código
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # Especifica la versión de Python que necesitas
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Instala las dependencias, como Selenium, usando el archivo requirements.txt
+
+    - name: Set up Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+        sudo apt-get install -y chromium-chromedriver
+        export PATH=$PATH:/usr/lib/chromium-browser/chromedriver  # Asegúrate de que ChromeDriver esté en el PATH
+
+    - name: Run Selenium tests
+      run: |
+        python tu_script.py  # Ejecuta tu script de Selenium
