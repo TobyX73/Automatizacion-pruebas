@@ -33,4 +33,4 @@ jobs:
 
     - name: Run Selenium tests
       run: |
-        python tu_script.py  
+        python main.py  
