@@ -25,4 +25,4 @@ jobs:
           python -m pip install selenium
 
       - name: Ejecutar script con Selenium
-        run: python main.py
+        run: python test_contacto.py
