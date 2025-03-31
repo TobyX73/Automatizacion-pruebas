@@ -37,7 +37,7 @@ def searchHotels():
         time.sleep(2)  
 
        
-        print("\n📊 Valores capturados en el navegador:")
+        print("\n Valores capturados en el navegador:")
         print(f"   - Fecha ingreso: {fecha_ingreso.get_attribute('value')}")
         print(f"   - Fecha salida: {fecha_salida.get_attribute('value')}")
         print(f"   - Adultos: {adultos.get_attribute('value')}")
@@ -54,25 +54,25 @@ def searchHotels():
                 if boton_consultar and boton_consultar.is_displayed():
                     break
             except:
-                print("🔄 Reintentando encontrar el botón 'Consultar'...")
+                print(" Reintentando encontrar el botón 'Consultar'...")
                
         
         if boton_consultar and boton_consultar.is_displayed():
             driver.execute_script("arguments[0].scrollIntoView(true);", boton_consultar)
-            print("🔎 Estado del botón 'Consultar':", boton_consultar.is_enabled())
+            print(" Estado del botón 'Consultar':", boton_consultar.is_enabled())
 
             if boton_consultar.is_enabled():
                 driver.execute_script("arguments[0].click();", boton_consultar)
-                print("✅ Consulta enviada correctamente.")
+                print(" Consulta enviada correctamente.")
                 wait.until(EC.url_changes(driver.current_url))
-                print("✅ Página de resultados cargada correctamente.")
+                print(" Página de resultados cargada correctamente.")
             else:
-                print("⚠️ El botón 'Consultar' está deshabilitado. Puede haber un problema en la selección de valores.")
+                print(" El botón 'Consultar' está deshabilitado. Puede haber un problema en la selección de valores.")
         else:
-            print("❌ No se pudo encontrar el botón 'Consultar' después de varios intentos.")
+            print(" No se pudo encontrar el botón 'Consultar' después de varios intentos.")
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
     finally:
         time.sleep(2)  
