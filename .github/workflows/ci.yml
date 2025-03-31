@@ -27,8 +27,8 @@ jobs:
       - name: Ejecutar script con Selenium
         run: python test_contacto.py
 
-      - name: Ejecutar segundo archivo de prueba
+      - name: Ejecutar script con Selenium
         run: python test_reservaDatos.py
-      
-      - name: Ejecutar tercer archivo de prueba
+
+      - name: Ejecutar script con Selenium
         run: python check.py
