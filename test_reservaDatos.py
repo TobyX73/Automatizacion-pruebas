@@ -5,16 +5,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 # Configuración del WebDriver
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(options=options)
 
 def makereservation():
-    driver.get("https://reservas.hotelesbagu.com/portal/es-es/hotel/reservahotel/?idHotel=2350&track=paso2&SESSIONPORTAL=le9cjg25lhnl92u5m07ib7trta")
+    driver.get("https://reservas.hotelesbagu.com/portal/es-es/hotel/reservahotel/?idHotel=2350&track=paso2&SESSIONPORTAL=lo4d13udt5gua2jldqhe1uuqgh")
 
     try:
-        wait = WebDriverWait(driver, 20)
+        wait = WebDriverWait(driver, 10)
 
         wait.until(EC.element_to_be_clickable((By.ID, "nombre"))).send_keys("Juan")
         wait.until(EC.element_to_be_clickable((By.ID, "apellido"))).send_keys("Pérez")
@@ -36,18 +37,19 @@ def makereservation():
         wait.until(EC.element_to_be_clickable((By.ID, "direccion"))).send_keys("Avenida Siempre Viva 742")
         wait.until(EC.element_to_be_clickable((By.ID, "peticiones"))).send_keys("cerradura electronica y reposeras")
 
-        # Aceptar términos y condiciones
-        aceptar_terminos = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@type='checkbox']")))
-        aceptar_terminos.click()
-        
+       # Buscar el helper (capa interactiva del checkbox)
+        checkbox_helper = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "ins.iCheck-helper")))
+        driver.execute_script("arguments[0].click();", checkbox_helper)
+
         # Enviar formulario
-        confirmar_reserva = wait.until(EC.presence_of_element_located((By.XPATH, "//button[contains(text(), 'Confirmar reserva')]")))
+        
+        confirmar_reserva = wait.until(EC.element_to_be_clickable((By.ID, "btnReservas")))
         driver.execute_script("arguments[0].scrollIntoView(true);", confirmar_reserva)
         ActionChains(driver).move_to_element(confirmar_reserva).click().perform()
-        
         print("✅ Reserva completada con éxito")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"❌ Error inesperado: {e}")
+
     finally:
         driver.quit()
 
