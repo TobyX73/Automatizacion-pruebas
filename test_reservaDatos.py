@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+
 
 # Configuración del WebDriver
 options = webdriver.ChromeOptions()
@@ -46,9 +46,9 @@ def makereservation():
         confirmar_reserva = wait.until(EC.element_to_be_clickable((By.ID, "btnReservas")))
         driver.execute_script("arguments[0].scrollIntoView(true);", confirmar_reserva)
         ActionChains(driver).move_to_element(confirmar_reserva).click().perform()
-        print("✅ Reserva completada con éxito")
+        print(" Reserva completada con éxito")
     except Exception as e:
-        print(f"❌ Error inesperado: {e}")
+        print(f" Error inesperado: {e}")
 
     finally:
         driver.quit()
