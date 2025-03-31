@@ -34,14 +34,7 @@ def makereservation():
         wait.until(EC.element_to_be_clickable((By.ID, "email"))).send_keys("juan.perez@example.com")
         wait.until(EC.element_to_be_clickable((By.ID, "email2"))).send_keys("juan.perez@example.com")
         wait.until(EC.element_to_be_clickable((By.ID, "direccion"))).send_keys("Avenida Siempre Viva 742")
-        
-        # Seleccionar tarjeta de crédito (MASTERCARD CREDITO)
-        tarjeta_opcion = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@name='tipoTarjeta_TG' and @value='2']")))  # Valor '2' corresponde a MASTERCARD CREDITO
-        driver.execute_script("arguments[0].click();", tarjeta_opcion)
-
-        wait.until(EC.presence_of_element_located((By.ID, "nroTC_TG"))).send_keys("1234567812345678")
-
-
+        wait.until(EC.element_to_be_clickable((By.ID, "peticiones"))).send_keys("cerradura electronica y reposeras")
 
         # Aceptar términos y condiciones
         aceptar_terminos = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@type='checkbox']")))
