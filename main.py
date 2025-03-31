@@ -47,18 +47,18 @@ def submitContactForm():
             actions = ActionChains(driver)
             actions.move_to_element(submitButton).click().perform()
         except Exception as e:
-            print(f"❌ Error al hacer clic en el botón: {e}")
+            print(f"Error al hacer clic en el botón: {e}")
             raise
 
-        print("✅ Formulario rellenado correctamente y enviado con éxito")
+        print("Formulario rellenado correctamente y enviado con éxito")
     except TimeoutException:
-        print("❌ Error: Tiempo de espera agotado al buscar un elemento.")
+        print("Error: Tiempo de espera agotado al buscar un elemento.")
     except NoSuchElementException as e:
-        print(f"❌ Error: No se encontró un elemento. Detalles: {e}")
+        print(f"Error: No se encontró un elemento. Detalles: {e}")
     except AssertionError as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
     except Exception as e:
-        print(f"❌ Error inesperado: {e}")
+        print(f"Error inesperado: {e}")
     finally:
         driver.quit()
 
