@@ -13,7 +13,7 @@ options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(options=options)
 
 def makereservation():
-    driver.get("https://reservas.hotelesbagu.com/portal/es-es/hotel/reservahotel/?idHotel=2350&track=paso2&SESSIONPORTAL=r79elrjau64a2h0ihl9defe1n7")
+    driver.get("https://reservas.hotelesbagu.com/portal/es-es/hotel/reservahotel/?idHotel=2350&track=paso2&SESSIONPORTAL=jmg3c3pduoe7b3grfud81212u8")
 
     try:
         wait = WebDriverWait(driver, 10)
@@ -43,8 +43,11 @@ def makereservation():
         time.sleep(1)
         wait.until(EC.element_to_be_clickable((By.ID, "email2"))).send_keys("juan.perez@example.com")
         time.sleep(1)
+        wait.until(EC.element_to_be_clickable((By.ID, "direccion"))).send_keys("Avenida Siempre Viva 742")
+        time.sleep(1)
         wait.until(EC.element_to_be_clickable((By.ID, "peticiones"))).send_keys("cerradura electronica y reposeras")
         time.sleep(1)
+        
        
        # Buscar el helper (capa interactiva del checkbox)
         checkbox_helper = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "ins.iCheck-helper")))
@@ -68,4 +71,8 @@ def makereservation():
 
 if __name__ == "__main__":
     makereservation()
+
+
+
+
 
