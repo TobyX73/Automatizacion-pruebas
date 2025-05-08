@@ -4,79 +4,87 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# Configuración del WebDriver
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(options=options)
+driver.maximize_window()
 
 def searchHotels():
-    driver.get("https://reservas.hotelesbagu.com/portal/es-es/?idHotel=2434")  
+    driver.get("https://reservas.hotelesbagu.com/portal/es-es/?idHotel=2350&fechaDesde=&fechaHasta=&forzarLimpiar=true&adultos=&ninios=")
 
     try:
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 15)
 
-        # Seleccionar la fecha de ingreso
         fecha_ingreso = wait.until(EC.element_to_be_clickable((By.ID, "fechaDesdeLateral")))
-        driver.execute_script("arguments[0].value = 'Abr 9, 2025'; arguments[0].dispatchEvent(new Event('change'))", fecha_ingreso)
+        fecha_ingreso.click()
+        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "datepicker")))
 
-        # Seleccionar la fecha de salida
+        while "Mayo 2025" not in driver.find_element(By.CLASS_NAME, "datepicker-switch").text:
+            driver.find_element(By.CLASS_NAME, "next").click()
+            time.sleep(0.5)
+
+        for dia in driver.find_elements(By.XPATH, "//td[@class='day' and text()='20']"):
+            if dia.is_displayed():
+                dia.click()
+                break
+
         fecha_salida = wait.until(EC.element_to_be_clickable((By.ID, "fechaHastaLateral")))
-        driver.execute_script("arguments[0].value = 'Abr 11, 2025'; arguments[0].dispatchEvent(new Event('change'))", fecha_salida)
+        fecha_salida.click()
+        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "datepicker")))
 
-        time.sleep(2)
+        while "Mayo 2025" not in driver.find_element(By.CLASS_NAME, "datepicker-switch").text:
+            driver.find_element(By.CLASS_NAME, "next").click()
+            time.sleep(0.5)
 
-      
-        adultos = wait.until(EC.presence_of_element_located((By.NAME, "optionsA")))
-        driver.execute_script("arguments[0].click();", adultos)
-        driver.execute_script("arguments[0].value = '1'; arguments[0].dispatchEvent(new Event('change'))", adultos)
+        for dia in driver.find_elements(By.XPATH, "//td[@class='day' and text()='25']"):
+            if dia.is_displayed():
+                dia.click()
+                break
 
-        # Seleccionar niños (Ejemplo: 1 niño)
-        ninos = wait.until(EC.presence_of_element_located((By.NAME, "optionsN")))
-        driver.execute_script("arguments[0].click();", ninos)
-        driver.execute_script("arguments[0].value = '0'; arguments[0].dispatchEvent(new Event('change'))", ninos)
+        time.sleep(1)
 
-        time.sleep(2)  
+        label_adulto = wait.until(EC.element_to_be_clickable((By.XPATH, "//label[input[@name='optionsA' and @value='1']]")))
+        label_adulto.click()
 
-       
-        print("\n Valores capturados en el navegador:")
-        print(f"   - Fecha ingreso: {fecha_ingreso.get_attribute('value')}")
-        print(f"   - Fecha salida: {fecha_salida.get_attribute('value')}")
-        print(f"   - Adultos: {adultos.get_attribute('value')}")
-        print(f"   - Niños: {ninos.get_attribute('value')}\n")
+        label_nino = wait.until(EC.element_to_be_clickable((By.XPATH, "//label[input[@name='optionsN' and @value='0']]")))
+        label_nino.click()
 
-       
+        time.sleep(1)
+
+        print("\nDatos seleccionados.")
+        print(f"   - Ingreso: {fecha_ingreso.get_attribute('value')}")
+        print(f"   - Salida: {fecha_salida.get_attribute('value')}")
+        print(f"   - Adultos: 1")
+        print(f"   - Niños: 0\n")
+
         driver.execute_script("document.body.click();")
-       
 
-        boton_consultar = None
-        for _ in range(5):  
-            try:
-                boton_consultar = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@type='submit' and @value='Consultar']")))
-                if boton_consultar and boton_consultar.is_displayed():
-                    break
-            except:
-                print(" Reintentando encontrar el botón 'Consultar'...")
-               
-        
-        if boton_consultar and boton_consultar.is_displayed():
-            driver.execute_script("arguments[0].scrollIntoView(true);", boton_consultar)
-            print(" Estado del botón 'Consultar':", boton_consultar.is_enabled())
+        boton_consultar = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "btn-buscar")))
+        try:
+            driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", boton_consultar)
+            time.sleep(1)
+        except Exception as e:
+            print(f"Error haciendo scroll: {e}")
 
-            if boton_consultar.is_enabled():
-                driver.execute_script("arguments[0].click();", boton_consultar)
-                print(" Consulta enviada correctamente.")
-                wait.until(EC.url_changes(driver.current_url))
-                print(" Página de resultados cargada correctamente.")
-            else:
-                print(" El botón 'Consultar' está deshabilitado. Puede haber un problema en la selección de valores.")
+        if boton_consultar.is_enabled():
+            boton_consultar.click()
+            print("Consulta enviada correctamente.")
+            wait.until(EC.url_changes(driver.current_url))
+            print("Página de resultados cargada.")
+           
         else:
-            print(" No se pudo encontrar el botón 'Consultar' después de varios intentos.")
+            print("El botón 'Consultar' está deshabilitado.")
+            return
+
+
 
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"\n[Error]: {e}")
 
     finally:
-        time.sleep(2)  
+        time.sleep(5)
         driver.quit()
 
 if __name__ == "__main__":
     searchHotels()
+
+
